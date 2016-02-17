@@ -45,6 +45,7 @@ function sb_meet_time_column_title($defaults) {
 		}
 		$new[$key] = $title;
 	}
+	unset($new["date"]);
 	return $new;
 }
 add_filter("manage_meet_posts_columns", "sb_meet_time_column_title", 10);
