@@ -38,8 +38,14 @@ add_action("init", "sb_meet_post_type");
  * @return array           The modified list of column headers.
  */
 function sb_meet_time_column_title($defaults) {
-	$defaults["meet_time"] = "Running Time";
-	return $defaults;
+	$new = array();
+	foreach($defaults as $key => $title) {
+		if ($key == "author") {
+			$new['meet_time'] = 'Running Time';
+		}
+		$new[$key] = $title;
+	}
+	return $new;
 }
 add_filter("manage_meet_posts_columns", "sb_meet_time_column_title", 10);
 
@@ -78,3 +84,120 @@ function sb_meet_time_column_orderby($query) {
 	}
 }
 add_action("pre_get_posts", "sb_meet_time_column_orderby");
+
+/**
+ * ACF configuration
+ */
+if(function_exists("register_field_group")) {
+	register_field_group(array (
+		'id' => 'acf_meet-details',
+		'title' => 'Meet Details',
+		'fields' => array (
+			array (
+				'key' => 'field_53bda6ededcb8',
+				'label' => 'Meet Notes',
+				'name' => 'meet_notes',
+				'type' => 'textarea',
+				'instructions' => 'Notes on this meet. This content is <strong>NOT</strong> rendered on the front-end of the site, and is here merely for reference and planning purposes.',
+				'default_value' => '',
+				'placeholder' => '',
+				'maxlength' => '',
+				'rows' => '',
+				'formatting' => 'none',
+			),
+			array (
+				'key' => 'field_532f5918221fb',
+				'label' => 'Start Time',
+				'name' => 'meet_start_time',
+				'type' => 'date_time_picker',
+				'instructions' => 'The starting time and date for the meet.',
+				'required' => 1,
+				'show_date' => 'true',
+				'date_format' => 'dd/mm/yy',
+				'time_format' => 'h:mm tt',
+				'show_week_number' => 'false',
+				'picker' => 'slider',
+				'save_as_timestamp' => 'true',
+				'get_as_timestamp' => 'true',
+			),
+			array (
+				'key' => 'field_532f59a1221fc',
+				'label' => 'End Time',
+				'name' => 'meet_end_time',
+				'type' => 'date_time_picker',
+				'instructions' => 'The ending time and date for the meet.',
+				'required' => 1,
+				'show_date' => 'true',
+				'date_format' => 'dd/mm/yy',
+				'time_format' => 'h:mm tt',
+				'show_week_number' => 'false',
+				'picker' => 'slider',
+				'save_as_timestamp' => 'true',
+				'get_as_timestamp' => 'true',
+			),
+			array (
+				'key' => 'field_533001b69737a',
+				'label' => 'Location',
+				'name' => 'meet_location',
+				'type' => 'relationship',
+				'instructions' => 'Where this meet is. ',
+				'required' => 1,
+				'return_format' => 'id',
+				'post_type' => array (
+					0 => 'location',
+				),
+				'taxonomy' => array (
+					0 => 'all',
+				),
+				'filters' => array (
+					0 => 'search',
+				),
+				'result_elements' => array (
+					0 => 'post_title',
+				),
+				'max' => '',
+			),
+			array (
+				'key' => 'field_53300fe71d850',
+				'label' => 'Meet Runner',
+				'name' => 'meet_runner',
+				'type' => 'relationship',
+				'instructions' => 'Who\'s in charge of this shindig?',
+				'required' => 1,
+				'return_format' => 'id',
+				'post_type' => array (
+					0 => 'meet_runner',
+				),
+				'taxonomy' => array (
+					0 => 'all',
+				),
+				'filters' => array (
+					0 => 'search',
+				),
+				'result_elements' => array (
+					0 => 'post_title',
+				),
+				'max' => '',
+			),
+		),
+		'location' => array (
+			array (
+				array (
+					'param' => 'post_type',
+					'operator' => '==',
+					'value' => 'meet',
+					'order_no' => 0,
+					'group_no' => 0,
+				),
+			),
+		),
+		'options' => array (
+			'position' => 'normal',
+			'layout' => 'default',
+			'hide_on_screen' => array (
+				0 => 'custom_fields',
+			),
+		),
+		'menu_order' => 0,
+	));
+}

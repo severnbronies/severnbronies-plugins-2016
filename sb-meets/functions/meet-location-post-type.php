@@ -39,8 +39,14 @@ add_action('init', 'sb_location_post_type');
  * @return array           The modified list of column headers.
  */
 function sb_meet_location_column_title($defaults) {
-	$defaults["location"] = "Location";
-	return $defaults;
+	$new = array();
+	foreach($defaults as $key => $title) {
+		if ($key == "author") {
+			$new['location'] = 'Location';
+		}
+		$new[$key] = $title;
+	}
+	return $new;
 }
 add_filter("manage_meet_posts_columns", "sb_meet_location_column_title", 10);
 
@@ -60,3 +66,91 @@ function sb_meet_location_column_content($column_name, $post_id) {
 	}
 }
 add_filter("manage_meet_posts_custom_column", "sb_meet_location_column_content", 10, 2);
+
+/**
+ * Add locality column header to list of meet locations. 
+ * @param  array $defaults List of existing column headers.
+ * @return array           List of modified column headers.
+ */
+function sb_meet_locality_column_title($defaults) {
+	$new = array();
+	foreach($defaults as $key => $title) {
+		if ($key == "author") {
+			$new['locality'] = 'Locality';
+		}
+		$new[$key] = $title;
+	}
+	return $new;
+}
+add_filter("manage_location_posts_columns", "sb_meet_locality_column_title", 10);
+
+/**
+ * Add locality column content to list of meet locations.
+ * @param  string $column_name The current column name.
+ * @param  int    $post_id     The current post ID.
+ */
+function sb_meet_locality_column_content($column_name, $post_id) {
+	if($column_name == "locality") {
+		echo get_field("location_locality", $post_id);
+	}
+}
+add_filter("manage_location_posts_custom_column", "sb_meet_locality_column_content", 10, 2);
+
+/**
+ * ACF configuration
+ */
+if(function_exists("register_field_group")) {
+	register_field_group(array (
+		'id' => 'acf_location-details',
+		'title' => 'Location Details',
+		'fields' => array (
+			array (
+				'key' => 'field_5330011b130fb',
+				'label' => 'Address',
+				'name' => 'location_address',
+				'type' => 'google_map',
+				'instructions' => 'Drop a pin for this location',
+				'center_lat' => '51.4481083',
+				'center_lng' => '-2.5835877',
+				'zoom' => 12,
+				'height' => '',
+			),
+			array (
+				'key' => 'field_56c487d97e01f',
+				'label' => 'Locality',
+				'name' => 'location_locality',
+				'type' => 'select',
+				'required' => 1,
+				'choices' => array (
+					'Bristol' => 'Bristol',
+					'Cardiff' => 'Cardiff',
+					'Newport' => 'Newport',
+					'Weston-super-Mare' => 'Weston-super-Mare',
+					'' => 'Other',
+				),
+				'default_value' => '',
+				'allow_null' => 1,
+				'multiple' => 0,
+			),
+		),
+		'location' => array (
+			array (
+				array (
+					'param' => 'post_type',
+					'operator' => '==',
+					'value' => 'location',
+					'order_no' => 0,
+					'group_no' => 0,
+				),
+			),
+		),
+		'options' => array (
+			'position' => 'normal',
+			'layout' => 'default',
+			'hide_on_screen' => array (
+				0 => 'custom_fields',
+			),
+		),
+		'menu_order' => 0,
+	));
+}

@@ -34,18 +34,24 @@ function sb_runner_post_type() {
 add_action("init", "sb_runner_post_type");
 
 /**
- * Add BB staff identifier column header to list of meet runners. 
+ * Add SB staff identifier column header to list of meet runners. 
  * @param  array $defaults List of existing column headers.
  * @return array           List of modified column headers.
  */
 function sb_runner_staff_column_title($defaults) {
-	$defaults["staff"] = "Staff?";
-	return $defaults;
+	$new = array();
+	foreach($defaults as $key => $title) {
+		if ($key == "author") {
+			$new['staff'] = 'Staff?';
+		}
+		$new[$key] = $title;
+	}
+	return $new;
 }
 add_filter("manage_meet_runner_posts_columns", "sb_runner_staff_column_title", 10);
 
 /**
- * Add BB staff identifier column content to list of meet runners.
+ * Add SB staff identifier column content to list of meet runners.
  * @param  string $column_name The current column name.
  * @param  int    $post_id     The current post ID.
  */
@@ -65,8 +71,14 @@ add_filter("manage_meet_runner_posts_custom_column", "sb_runner_staff_column_con
  * @return array           The modified list of column headers.
  */
 function sb_meet_runner_column_title($defaults) {
-	$defaults["meet_runner"] = "Meet Runner";
-	return $defaults;
+	$new = array();
+	foreach($defaults as $key => $title) {
+		if ($key == "author") {
+			$new['meet_runner'] = 'Meet Runner';
+		}
+		$new[$key] = $title;
+	}
+	return $new;
 }
 add_filter("manage_meet_posts_columns", "sb_meet_runner_column_title", 10);
 
@@ -85,3 +97,98 @@ function sb_meet_runner_column_content($column_name, $post_id) {
 	}
 }
 add_filter("manage_meet_posts_custom_column", "sb_meet_runner_column_content", 11, 2);
+
+/**
+ * ACF configuration
+ */
+if(function_exists("register_field_group")) {
+	register_field_group(array (
+		'id' => 'acf_meet-runner-metadata',
+		'title' => 'Meet Runner Metadata',
+		'fields' => array (
+			array (
+				'key' => 'field_53384f1437d30',
+				'label' => 'Is this person a current Severn Bronies staff member?',
+				'name' => 'runner_staff',
+				'type' => 'checkbox',
+				'choices' => array (
+					'true' => 'Yes, this person is a current Severn Bronies staff member!',
+				),
+				'default_value' => '',
+				'layout' => 'vertical',
+			),
+		),
+		'location' => array (
+			array (
+				array (
+					'param' => 'post_type',
+					'operator' => '==',
+					'value' => 'meet_runner',
+					'order_no' => 0,
+					'group_no' => 0,
+				),
+			),
+		),
+		'options' => array (
+			'position' => 'side',
+			'layout' => 'default',
+			'hide_on_screen' => array (
+				0 => 'custom_fields',
+			),
+		),
+		'menu_order' => 0,
+	));
+	register_field_group(array (
+		'id' => 'acf_meet-runner-profile',
+		'title' => 'Meet Runner Profile',
+		'fields' => array (
+			array (
+				'key' => 'field_53300f71d84e2',
+				'label' => 'Small Avatar',
+				'name' => 'runner_avatar',
+				'type' => 'image_crop',
+				'instructions' => 'To upload a new avatar, delete the existing image (by hovering over the image below and clicking the × symbol) and upload a new one. ',
+				'crop_type' => 'hard',
+				'target_size' => 'custom',
+				'width' => 150,
+				'height' => 150,
+				'preview_size' => 'medium',
+				'force_crop' => 'yes',
+				'save_in_media_library' => 'yes',
+				'retina_mode' => 'no',
+				'save_format' => 'url',
+			),
+			array (
+				'key' => 'field_562e6c282319c',
+				'label' => 'Links',
+				'name' => 'runner_links',
+				'type' => 'textarea',
+				'instructions' => 'URLs for social media or other websites you want to show off. One per line.',
+				'default_value' => '',
+				'placeholder' => "http://severnbronies.co.uk\nhttp://twitter.com/severnbronies\nhttp://facebook.com/severnbronies",
+				'maxlength' => '',
+				'rows' => 5,
+				'formatting' => 'none',
+			),
+		),
+		'location' => array (
+			array (
+				array (
+					'param' => 'post_type',
+					'operator' => '==',
+					'value' => 'meet_runner',
+					'order_no' => 0,
+					'group_no' => 0,
+				),
+			),
+		),
+		'options' => array (
+			'position' => 'normal',
+			'layout' => 'default',
+			'hide_on_screen' => array (
+				0 => 'custom_fields',
+			),
+		),
+		'menu_order' => 0,
+	));
+}

@@ -11,5 +11,4 @@ Author URI: http://greysadventures.com/
 require_once "functions/meet-post-type.php";
 require_once "functions/meet-runner-post-type.php";
 require_once "functions/meet-location-post-type.php";
-require_once "functions/acf.php";
 require_once "functions/front-end.php";
