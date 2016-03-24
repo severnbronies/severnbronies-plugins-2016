@@ -1,0 +1,7 @@
+{
+    "require": {
+        "j7mbo/twitter-api-php": "dev-master",
+        "facebook/php-sdk-v4" : "~5.0",
+        "tumblr/tumblr" : "dev-master"
+    }
+}
