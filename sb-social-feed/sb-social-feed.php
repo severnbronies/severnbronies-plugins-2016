@@ -10,9 +10,9 @@ Author URI: http://greysadventures.com/
 
 require __DIR__ . '/vendor/autoload.php';
 
-function sb_social_feed($settings) {
+function sb_social_feed($settings, $cache_time = 30) {
 	$cache_file = __DIR__ . '/cache';
-	if(file_exists($cache_file) && (time() - 1800 < filemtime($cache_file))) {
+	if($cache_time > 0 && file_exists($cache_file) && (time() - ($cache_time * 60) < filemtime($cache_file))) {
 		return json_decode(file_get_contents($cache_file)); 
 	}
 	else {
@@ -58,10 +58,9 @@ function sb_social_twitter($account, $limit = 10) {
 	return $output;
 }
 
-function sb_social_facebook($account, $limit = 20) {
-	// TODO: Make this way better. Seriously, it's kinda shitty.
-	$url = "https://graph.facebook.com/v2.5/" . $account . "/posts?fields=message,created_time,picture,permalink_url&limit=" . $limit . "&access_token=" . FACEBOOK_ACCESS_TOKEN;
-	$data = json_decode(file_get_contents($url));
+function sb_social_facebook($account, $limit = 10) {
+	$access_token = file_get_contents("https://graph.facebook.com/oauth/access_token?client_id=" . FACEBOOK_APP_ID . "&client_secret=" . FACEBOOK_APP_SECRET . "&grant_type=client_credentials");
+	$data = json_decode(file_get_contents("https://graph.facebook.com/v2.5/$account/posts?fields=message,created_time,picture,permalink_url&limit=$limit&$access_token"));
 	$output = array();
 	foreach($data->data as $status) {
 		if(isset($status->message) && !empty($status->message)) {
