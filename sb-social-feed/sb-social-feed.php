@@ -17,9 +17,9 @@ function sb_social_feed($settings) {
 	}
 	else {
 		$posts = array_merge(
-			sb_social_twitter($settings["twitter"]),
-			sb_social_facebook($settings["facebook"]),
-			sb_social_tumblr($settings["tumblr"])
+			sb_social_twitter($settings["twitter"], $settings["limit"]),
+			sb_social_facebook($settings["facebook"], $settings["limit"]),
+			sb_social_tumblr($settings["tumblr"], $settings["limit"])
 		);
 		usort($posts, function($a, $b) {
 			return $b["timestamp"] - $a["timestamp"];
