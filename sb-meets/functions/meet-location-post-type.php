@@ -120,7 +120,7 @@ if(function_exists("register_field_group")) {
 				'label' => 'Locality',
 				'name' => 'location_locality',
 				'type' => 'select',
-				'required' => 1,
+				'required' => 0,
 				'choices' => array (
 					'Bristol' => 'Bristol',
 					'Cardiff' => 'Cardiff',
