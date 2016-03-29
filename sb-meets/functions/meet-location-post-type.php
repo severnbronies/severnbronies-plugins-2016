@@ -126,7 +126,7 @@ if(function_exists("register_field_group")) {
 					'Cardiff' => 'Cardiff',
 					'Newport' => 'Newport',
 					'Weston-super-Mare' => 'Weston-super-Mare',
-					'' => 'Other',
+					'' => 'Elsewhere',
 				),
 				'default_value' => '',
 				'allow_null' => 1,
