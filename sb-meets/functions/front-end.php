@@ -52,7 +52,7 @@ function sb_meet_location($id) {
 		"address" => $data["address"],
 		"latitude" => $data["lat"],
 		"longitude" => $data["lng"],
-		"locality" => get_field("location_locality", $id[0])
+		"locality" => (get_field("location_locality", $id[0]) != "") ? get_field("location_locality", $id[0]) : "Severn" 
 	);
 }
 
