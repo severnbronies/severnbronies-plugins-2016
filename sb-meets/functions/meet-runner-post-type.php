@@ -117,6 +117,12 @@ if(function_exists("register_field_group")) {
 				'default_value' => '',
 				'layout' => 'vertical',
 			),
+			array (
+				'key' => 'field_8xWzasD44tWQD',
+				'label' => 'Contact email',
+				'name' => 'runner_email',
+				'type' => 'text'
+			)
 		),
 		'location' => array (
 			array (
@@ -176,7 +182,7 @@ if(function_exists("register_field_group")) {
 				'maxlength' => '',
 				'rows' => 5,
 				'formatting' => 'none',
-			),
+			)
 		),
 		'location' => array (
 			array (
