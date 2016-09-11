@@ -8,6 +8,12 @@ Author: Kimberly Grey
 Author URI: http://greysadventures.com/
 */
 
+function sb_custom_file_types($mimes) {
+	$mimes["svg"] = "image/svg+xml";
+	return $mimes;
+}
+add_filter("upload_mimes", "sb_custom_file_types");
+
 /**
  * Add copyright field to the media uploader.
  * @param  array  $form_fields The list of existing form fields.
