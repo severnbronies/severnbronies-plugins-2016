@@ -60,7 +60,7 @@ function sb_social_twitter($account, $limit = 10) {
 
 function sb_social_facebook($account, $limit = 10) {
 	$access_token = file_get_contents("https://graph.facebook.com/oauth/access_token?client_id=" . FACEBOOK_APP_ID . "&client_secret=" . FACEBOOK_APP_SECRET . "&grant_type=client_credentials");
-	$data = json_decode(file_get_contents("https://graph.facebook.com/v2.5/$account/posts?fields=message,created_time,picture,permalink_url&limit=$limit&$access_token"));
+	$data = json_decode(file_get_contents("https://graph.facebook.com/v2.5/$account/posts?fields=message,created_time,full_picture,permalink_url&limit=$limit&$access_token"));
 	$output = array();
 	foreach($data->data as $status) {
 		if(isset($status->message) && !empty($status->message)) {
@@ -69,7 +69,7 @@ function sb_social_facebook($account, $limit = 10) {
 				"permalink" => $status->permalink_url,
 				"timestamp" => strtotime($status->created_time),
 				"content" => $status->message,
-				"image" => $status->picture
+				"image" => $status->full_picture
 			);
 		}
 	}
